@@ -2,22 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDD TECH | Enterprise Technology Solutions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>SDD TECH | Advanced Technology Solutions</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1a3a8f;
-            --primary-dark: #0f2560;
-            --primary-light: #2a4bb3;
-            --secondary: #00a8e8;
-            --accent: #ff6b35;
-            --dark: #121212;
-            --light: #f8f9fa;
-            --gray: #6c757d;
-            --gray-light: #e9ecef;
-            --success: #28a745;
+            --primary: #0a0f2a;
+            --primary-dark: #050817;
+            --primary-light: #1a2b6e;
+            --secondary: #00d4ff;
+            --accent: #ff3366;
+            --dark: #0a0c15;
+            --light: #f0f4fc;
+            --gray: #8a9bb5;
+            --gray-light: #1e2438;
+            --success: #00d68f;
+            --glow: 0 0 15px rgba(0, 212, 255, 0.5);
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -28,15 +29,22 @@
             font-family: 'Inter', sans-serif;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
-            background-color: var(--light);
-            color: var(--dark);
+            background-color: var(--dark);
+            color: var(--light);
             line-height: 1.6;
             overflow-x: hidden;
+        }
+
+        /* Canvas 3D Background */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
         }
 
         .container {
@@ -44,18 +52,19 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Header & Navigation */
+        /* Header & Navigation - Glassmorphism */
         header {
-            background-color: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.08);
+            background: rgba(10, 12, 21, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .navbar {
@@ -70,12 +79,18 @@
             align-items: center;
             font-weight: 800;
             font-size: 1.8rem;
-            color: var(--primary);
+            background: linear-gradient(135deg, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             letter-spacing: -0.5px;
         }
 
         .logo span {
-            color: var(--secondary);
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .nav-links {
@@ -89,7 +104,7 @@
 
         .nav-links a {
             text-decoration: none;
-            color: var(--dark);
+            color: var(--light);
             font-weight: 500;
             transition: var(--transition);
             position: relative;
@@ -97,7 +112,8 @@
         }
 
         .nav-links a:hover {
-            color: var(--primary);
+            color: var(--secondary);
+            text-shadow: var(--glow);
         }
 
         .nav-links a::after {
@@ -107,7 +123,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
             transition: var(--transition);
         }
 
@@ -119,88 +135,81 @@
             display: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: var(--primary);
+            color: var(--secondary);
         }
 
-        /* Hero Section */
+        /* Hero Section with 3D context */
         .hero {
-            padding: 200px 0 120px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
+            padding: 220px 0 140px;
             position: relative;
             overflow: hidden;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.03" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,192C1248,192,1344,128,1392,96L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
-            background-size: cover;
-            background-position: center;
-        }
-
         .hero-content {
             position: relative;
-            z-index: 1;
+            z-index: 2;
             max-width: 800px;
+            backdrop-filter: blur(2px);
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 3.8rem;
             margin-bottom: 20px;
             line-height: 1.1;
             font-weight: 800;
-            letter-spacing: -1px;
+            background: linear-gradient(135deg, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .hero p {
             font-size: 1.3rem;
             margin-bottom: 35px;
             opacity: 0.9;
-            font-weight: 400;
+            color: #ccddf8;
         }
 
         .btn {
             display: inline-block;
             padding: 14px 32px;
-            background: linear-gradient(135deg, var(--accent), #e55a2b);
-            color: white;
+            background: linear-gradient(135deg, var(--secondary), #0099cc);
+            color: var(--dark);
             border: none;
-            border-radius: 8px;
-            font-weight: 600;
+            border-radius: 40px;
+            font-weight: 700;
             text-decoration: none;
             transition: var(--transition);
             cursor: pointer;
             margin: 5px 10px 5px 0;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
             font-size: 1rem;
         }
 
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
         }
 
         .btn-outline {
             background: transparent;
-            border: 2px solid white;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
             box-shadow: none;
         }
 
         .btn-outline:hover {
-            background: white;
-            color: var(--primary);
+            background: var(--secondary);
+            color: var(--dark);
         }
 
         /* Stats Section */
         .stats {
-            background-color: white;
-            padding: 80px 0;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
+            background: rgba(5, 8, 23, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 60px 0;
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
         }
 
         .stats-grid {
@@ -217,7 +226,10 @@
         .stat-number {
             font-size: 3rem;
             font-weight: 800;
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             margin-bottom: 10px;
         }
 
@@ -226,7 +238,7 @@
             font-weight: 500;
         }
 
-        /* Services Section */
+        /* Sections */
         .section {
             padding: 100px 0;
         }
@@ -238,10 +250,12 @@
 
         .section-title h2 {
             font-size: 2.8rem;
-            color: var(--primary);
+            background: linear-gradient(135deg, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             margin-bottom: 15px;
             font-weight: 700;
-            letter-spacing: -0.5px;
         }
 
         .section-title p {
@@ -251,6 +265,7 @@
             font-size: 1.1rem;
         }
 
+        /* Services Grid */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -258,43 +273,42 @@
         }
 
         .service-card {
-            background-color: white;
-            border-radius: 12px;
+            background: rgba(20, 24, 45, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
             padding: 40px 30px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.06);
             transition: var(--transition);
             text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.2);
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.03);
         }
 
         .service-card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
+            left: -100%;
             width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: var(--transition);
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,212,255,0.1), transparent);
+            transition: left 0.6s;
         }
 
         .service-card:hover::before {
-            transform: scaleX(1);
+            left: 100%;
         }
 
         .service-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--secondary);
+            box-shadow: 0 0 25px rgba(0,212,255,0.3);
         }
 
         .service-icon {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -311,14 +325,17 @@
 
         .service-card h3 {
             margin-bottom: 15px;
-            color: var(--primary);
+            color: var(--secondary);
             font-size: 1.4rem;
-            font-weight: 600;
         }
 
-        /* Portfolio Section */
+        .service-card p {
+            color: #b8c7e7;
+        }
+
+        /* Portfolio */
         .portfolio {
-            background-color: #f8fafc;
+            background: rgba(5, 8, 23, 0.5);
         }
 
         .portfolio-filters {
@@ -331,18 +348,20 @@
 
         .filter-btn {
             padding: 10px 20px;
-            background: white;
-            border: 1px solid var(--gray-light);
+            background: rgba(20, 24, 45, 0.8);
+            border: 1px solid rgba(0, 212, 255, 0.3);
             border-radius: 30px;
             font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
+            color: var(--light);
         }
 
         .filter-btn.active, .filter-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+            background: var(--secondary);
+            color: var(--dark);
+            border-color: var(--secondary);
+            box-shadow: 0 0 15px var(--secondary);
         }
 
         .portfolio-grid {
@@ -352,17 +371,18 @@
         }
 
         .portfolio-item {
-            border-radius: 12px;
+            background: rgba(20, 24, 45, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.06);
             transition: var(--transition);
-            background-color: white;
-            position: relative;
+            border: 1px solid rgba(0, 212, 255, 0.2);
         }
 
         .portfolio-item:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--secondary);
+            box-shadow: 0 10px 30px rgba(0,212,255,0.2);
         }
 
         .portfolio-img {
@@ -372,25 +392,7 @@
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.8rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .portfolio-img::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            transition: var(--transition);
-        }
-
-        .portfolio-item:hover .portfolio-img::after {
-            opacity: 1;
+            font-size: 3rem;
         }
 
         .portfolio-content {
@@ -398,61 +400,43 @@
         }
 
         .portfolio-content h3 {
+            color: var(--secondary);
             margin-bottom: 10px;
-            color: var(--primary);
-            font-size: 1.3rem;
-        }
-
-        .portfolio-content p {
-            color: var(--gray);
-            margin-bottom: 15px;
-            font-size: 0.95rem;
         }
 
         .portfolio-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 20px;
+            margin: 15px 0;
         }
 
         .tag {
-            background-color: rgba(26, 58, 143, 0.1);
-            color: var(--primary);
+            background: rgba(0, 212, 255, 0.15);
+            color: var(--secondary);
             padding: 5px 12px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 500;
         }
 
-        .portfolio-links {
-            display: flex;
-            gap: 15px;
-        }
-
-        .portfolio-link {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: var(--primary);
+        .portfolio-links a {
+            color: var(--light);
+            margin-right: 20px;
             text-decoration: none;
-            font-weight: 500;
             font-size: 0.9rem;
-            transition: var(--transition);
+            transition: 0.3s;
         }
 
-        .portfolio-link:hover {
+        .portfolio-links a:hover {
             color: var(--secondary);
         }
 
-        /* Technology Stack */
+        /* Tech Stack (already styled) */
         .tech-stack {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-        }
-
-        .tech-stack .section-title h2 {
-            color: white;
+            background: linear-gradient(135deg, #0a0c1a, #010101);
+            border-top: 1px solid rgba(0,212,255,0.2);
+            border-bottom: 1px solid rgba(0,212,255,0.2);
         }
 
         .tech-grid {
@@ -462,1106 +446,388 @@
         }
 
         .tech-category {
-            background-color: rgba(255, 255, 255, 0.1);
+            background: rgba(20, 24, 45, 0.6);
             padding: 30px;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-            transition: var(--transition);
-        }
-
-        .tech-category:hover {
-            transform: translateY(-5px);
-            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0,212,255,0.2);
         }
 
         .tech-category h3 {
-            margin-bottom: 20px;
             color: var(--secondary);
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .tech-list {
-            list-style: none;
+            margin-bottom: 20px;
         }
 
         .tech-list li {
             margin-bottom: 12px;
             display: flex;
             align-items: center;
+            color: #ccddf8;
         }
 
         .tech-list i {
             color: var(--accent);
             margin-right: 10px;
-            font-size: 1rem;
         }
 
-        /* Process Section */
-        .process {
-            background-color: white;
+        /* Laptop Sales Section */
+        .laptop-section {
+            background: radial-gradient(circle at 10% 20%, rgba(0,212,255,0.05), transparent);
         }
 
-        .process-steps {
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .process-steps::before {
-            content: '';
-            position: absolute;
-            top: 40px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--gray-light);
-            z-index: 1;
-        }
-
-        .process-step {
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            flex: 1;
-            padding: 0 15px;
-        }
-
-        .step-number {
-            width: 80px;
-            height: 80px;
-            background: white;
-            border: 2px solid var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            transition: var(--transition);
-        }
-
-        .process-step:hover .step-number {
-            background: var(--primary);
-            color: white;
-        }
-
-        .step-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--primary);
-        }
-
-        /* Testimonials */
-        .testimonials {
-            background-color: #f8fafc;
-        }
-
-        .testimonial-grid {
+        .laptop-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .testimonial-card {
-            background-color: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.06);
-            transition: var(--transition);
-        }
-
-        .testimonial-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .testimonial-text {
-            font-style: italic;
-            margin-bottom: 20px;
-            color: var(--gray);
-            position: relative;
-        }
-
-        .testimonial-text::before {
-            content: '"';
-            font-size: 4rem;
-            color: var(--primary-light);
-            opacity: 0.2;
-            position: absolute;
-            top: -20px;
-            left: -10px;
-            font-family: serif;
-        }
-
-        .testimonial-author {
-            display: flex;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
             align-items: center;
         }
 
-        .author-avatar {
+        .laptop-card {
+            background: rgba(20,24,45,0.8);
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            border: 1px solid rgba(0,212,255,0.3);
+        }
+
+        .laptop-card h3 {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 20px 0;
+        }
+
+        /* Contact */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(20,24,45,0.5);
+            border-radius: 15px;
+        }
+
+        .contact-icon {
             width: 50px;
             height: 50px;
+            background: rgba(0,212,255,0.2);
             border-radius: 50%;
-            background: var(--primary-light);
-            margin-right: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-        }
-
-        .author-info h4 {
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-
-        .author-info p {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-
-        /* CTA Section */
-        .cta {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            text-align: center;
-            padding: 100px 0;
-        }
-
-        .cta h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .cta p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 40px;
-            opacity: 0.9;
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--dark);
-            color: white;
-            padding: 80px 0 30px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 50px;
-        }
-
-        .footer-column h3 {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
             color: var(--secondary);
-            font-weight: 600;
         }
 
-        .footer-links {
-            list-style: none;
+        .contact-form {
+            background: rgba(20,24,45,0.6);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(8px);
         }
 
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-
-        .footer-links a {
-            color: #aaa;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(0,212,255,0.3);
+            border-radius: 12px;
             color: white;
-            padding-left: 5px;
         }
 
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
+        .form-control:focus {
+            border-color: var(--secondary);
+            outline: none;
         }
 
-        .social-links a {
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-decoration: none;
-            transition: var(--transition);
+        footer {
+            background: #05070f;
+            padding: 70px 0 30px;
+            border-top: 1px solid rgba(0,212,255,0.2);
         }
 
-        .social-links a:hover {
-            background-color: var(--secondary);
-            transform: translateY(-3px);
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #aaa;
-            font-size: 0.9rem;
-        }
-
-        /* WhatsApp Integration */
         .whatsapp-float {
             position: fixed;
-            width: 60px;
-            height: 60px;
             bottom: 30px;
             right: 30px;
-            background-color: #25d366;
-            color: white;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 30px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-            z-index: 100;
+            background: #25D366;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition);
-            animation: pulse 2s infinite;
+            font-size: 30px;
+            color: white;
+            z-index: 100;
+            box-shadow: 0 0 20px rgba(37,211,102,0.5);
+            transition: 0.3s;
         }
 
         .whatsapp-float:hover {
             transform: scale(1.1);
-            background-color: #128C7E;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
-            }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            .hero h1 {
-                font-size: 2.8rem;
-            }
-            
-            .process-steps {
-                flex-direction: column;
-                gap: 40px;
-            }
-            
-            .process-steps::before {
-                display: none;
-            }
         }
 
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background-color: white;
-                flex-direction: column;
-                padding: 20px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            }
-            
-            .nav-links.active {
-                display: flex;
-            }
-            
-            .nav-links li {
-                margin: 10px 0;
-            }
-            
-            .mobile-menu {
-                display: block;
-            }
-            
-            .hero {
-                padding: 160px 0 80px;
-                text-align: center;
-            }
-            
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-            
-            .section {
-                padding: 80px 0;
-            }
-            
-            .section-title h2 {
-                font-size: 2.2rem;
-            }
-            
-            .btn {
-                display: block;
-                width: 100%;
-                margin: 10px 0;
-            }
-            
-            .portfolio-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .whatsapp-float {
-                width: 50px;
-                height: 50px;
-                bottom: 20px;
-                right: 20px;
-                font-size: 24px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 1.9rem;
-            }
-            
-            .section-title h2 {
-                font-size: 1.8rem;
-            }
-            
-            .service-card, .portfolio-item, .tech-category, .testimonial-card {
-                padding: 25px 20px;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
+            .hero h1 { font-size: 2.2rem; }
+            .laptop-grid { grid-template-columns: 1fr; }
+            .contact-content { grid-template-columns: 1fr; }
+            .nav-links { display: none; flex-direction: column; background: #0a0c1a; position: absolute; top: 80px; left: 0; width: 100%; padding: 20px; }
+            .nav-links.active { display: flex; }
+            .mobile-menu { display: block; }
+            .portfolio-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- WhatsApp Float Button -->
-    <a href="https://wa.me/27655092417?text=Hi%20SDD%20TECH,%20I'm%20interested%20in%20your%20services" class="whatsapp-float" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
 
-    <!-- Header & Navigation -->
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <div class="logo">SDD<span>TECH</span></div>
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#portfolio">Portfolio</a></li>
-                    <li><a href="#technology">Technology</a></li>
-                    <li><a href="#process">Process</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-                <div class="mobile-menu">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </nav>
+<canvas id="bg-canvas"></canvas>
+
+<!-- WhatsApp Float -->
+<a href="https://wa.me/27655092417?text=Hi%20SDD%20TECH%20-%20I%20need%20tech%20solutions" class="whatsapp-float" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<header>
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">SDD<span>TECH</span></div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#technology">Tech Stack</a></li>
+                <li><a href="#laptops">Laptops & Repairs</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<section id="home" class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Next-Gen Tech Solutions & Digital Innovation</h1>
+            <p>We build AI-ready platforms, secure systems, and high-performance digital experiences. From custom dev to hardware repairs – your all-in-one tech powerhouse.</p>
+            <a href="#portfolio" class="btn">Explore Work</a>
+            <a href="#laptops" class="btn btn-outline">Refurbished Laptops</a>
         </div>
-    </header>
+    </div>
+</section>
 
-    <!-- Home Section -->
-    <section id="home" class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Enterprise-Grade Technology Solutions</h1>
-                <p>We architect, develop, and deploy robust digital solutions that drive business growth, efficiency, and competitive advantage.</p>
-                <a href="#portfolio" class="btn">View Our Work</a>
-                <a href="#contact" class="btn btn-outline">Start a Project</a>
-            </div>
+<section class="stats">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item"><div class="stat-number">80+</div><div class="stat-label">Projects Delivered</div></div>
+            <div class="stat-item"><div class="stat-number">25+</div><div class="stat-label">Technologies</div></div>
+            <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">Client Trust</div></div>
+            <div class="stat-item"><div class="stat-number">7+</div><div class="stat-label">Years Experience</div></div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">50+</div>
-                    <div class="stat-label">Projects Completed</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">15+</div>
-                    <div class="stat-label">Technologies</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">100%</div>
-                    <div class="stat-label">Client Satisfaction</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">5+</div>
-                    <div class="stat-label">Years Experience</div>
-                </div>
-            </div>
+<section id="services" class="section">
+    <div class="container">
+        <div class="section-title"><h2>Comprehensive Tech Services</h2><p>End-to-end software, hardware, and IT solutions.</p></div>
+        <div class="services-grid">
+            <div class="service-card"><div class="service-icon"><i class="fas fa-code"></i></div><h3>Custom Software Dev</h3><p>Scalable web & mobile apps, ERP, CRM, AI integration.</p></div>
+            <div class="service-card"><div class="service-icon"><i class="fas fa-laptop-code"></i></div><h3>Web & E‑commerce</h3><p>React, Node, Shopify, WordPress – high‑performance stores.</p></div>
+            <div class="service-card"><div class="service-icon"><i class="fas fa-mobile-alt"></i></div><h3>Mobile Apps</h3><p>iOS/Android, Flutter, React Native, merchant solutions.</p></div>
+            <div class="service-card"><div class="service-icon"><i class="fas fa-database"></i></div><h3>Database & Cloud</h3><p>AWS, Azure, MongoDB, PostgreSQL – secure & scalable.</p></div>
+            <div class="service-card"><div class="service-icon"><i class="fas fa-laptop"></i></div><h3>Refurbished Laptops</h3><p>Quality laptops from R2600. Perfect for work & study. Warranty included.</p></div>
+            <div class="service-card"><div class="service-icon"><i class="fas fa-tools"></i></div><h3>Laptop Hardware & Software Repair</h3><p>Diagnostics, screen replacement, OS fix, virus removal – fast turnaround.</p></div>
+            <div class="service-card"><div class="service-icon"><i class="fas fa-shield-alt"></i></div><h3>Cybersecurity & IT Support</h3><p>Data protection, network security, 24/7 monitoring.</p></div>
+            <div class="service-card"><div class="service-icon"><i class="fas fa-chart-line"></i></div><h3>Digital Transformation</h3><p>Business automation, workflow optimization, legacy migration.</p></div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Services Section -->
-    <section id="services" class="section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Our Services</h2>
-                <p>Comprehensive technology solutions tailored to your business needs and objectives.</p>
-            </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3>Custom Software Development</h3>
-                    <p>End-to-end development of scalable, secure business applications using modern technologies and best practices.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <h3>Web Application Development</h3>
-                    <p>Responsive, high-performance web applications with intuitive UX and robust backend architecture.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>Mobile App Development</h3>
-                    <p>Cross-platform mobile applications that deliver seamless user experiences across iOS and Android devices.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <h3>Database Design & Optimization</h3>
-                    <p>Strategic database architecture, implementation, and performance tuning for optimal data management.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Cybersecurity & IT Support</h3>
-                    <p>Comprehensive security implementation and ongoing technical support to protect your digital assets.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-cloud"></i>
-                    </div>
-                    <h3>Cloud Solutions & DevOps</h3>
-                    <p>Cloud migration, infrastructure setup, and CI/CD pipelines for scalable, resilient applications.</p>
-                </div>
-            </div>
+<section id="portfolio" class="section portfolio">
+    <div class="container">
+        <div class="section-title"><h2>Innovative Projects</h2><p>Real solutions, real impact.</p></div>
+        <div class="portfolio-filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="web">Web Apps</button>
+            <button class="filter-btn" data-filter="business">Business</button>
+            <button class="filter-btn" data-filter="ecommerce">E‑commerce</button>
         </div>
-    </section>
+        <div class="portfolio-grid">
+            <div class="portfolio-item" data-category="business"><div class="portfolio-img"><i class="fas fa-graduation-cap"></i></div><div class="portfolio-content"><h3>Meela Training & Development</h3><p>Educational platform for skills development.</p><div class="portfolio-tags"><span class="tag">PHP/MySQL</span><span class="tag">LMS</span></div><div class="portfolio-links"><a href="http://www.meelatdi.co.za" target="_blank">Live Site →</a></div></div></div>
+            <div class="portfolio-item" data-category="ecommerce"><div class="portfolio-img"><i class="fas fa-store"></i></div><div class="portfolio-content"><h3>Meela Merchant App</h3><p>Merchant dashboard & e‑commerce solution.</p><div class="portfolio-tags"><span class="tag">React</span><span class="tag">Node.js</span></div><div class="portfolio-links"><a href="https://meelamerchant.com" target="_blank">Visit →</a></div></div></div>
+            <div class="portfolio-item" data-category="web"><div class="portfolio-img"><i class="fas fa-file-alt"></i></div><div class="portfolio-content"><h3>Smart Career CV</h3><p>AI-powered CV builder & career platform.</p><div class="portfolio-tags"><span class="tag">Next.js</span><span class="tag">MongoDB</span></div><div class="portfolio-links"><a href="https://www.smartcareercv.co.za" target="_blank">Live Demo →</a></div></div></div>
+            <div class="portfolio-item" data-category="business"><div class="portfolio-img"><i class="fas fa-building"></i></div><div class="portfolio-content"><h3>Shumane Holdings</h3><p>Corporate website for investment holdings.</p><div class="portfolio-tags"><span class="tag">HTML5/CSS3</span><span class="tag">Bootstrap</span></div><div class="portfolio-links"><a href="https://www.shumaneholdings.com" target="_blank">Visit →</a></div></div></div>
+            <div class="portfolio-item" data-category="web"><div class="portfolio-img"><i class="fas fa-chart-line"></i></div><div class="portfolio-content"><h3>Financial Trading Platform</h3><p>Real-time trading with portfolio tracking.</p><div class="portfolio-tags"><span class="tag">React</span><span class="tag">Node</span><span class="tag">WebSocket</span></div><div class="portfolio-links"><a href="https://github.com/Mdluljionas" target="_blank">GitHub →</a></div></div></div>
+            <div class="portfolio-item" data-category="ecommerce"><div class="portfolio-img"><i class="fas fa-mobile-alt"></i></div><div class="portfolio-content"><h3>Phone E‑commerce</h3><p>Mobile device store with cart system.</p><div class="portfolio-tags"><span class="tag">JS/CSS</span></div><div class="portfolio-links"><a href="https://mdlulijonas.github.io/Phone-Website/" target="_blank">Demo →</a></div></div></div>
+            <div class="portfolio-item" data-category="web"><div class="portfolio-img"><i class="fas fa-cut"></i></div><div class="portfolio-content"><h3>Siba Styles Salon</h3><p>Booking & portfolio for beauty salon.</p><div class="portfolio-tags"><span class="tag">Bootstrap</span><span class="tag">JS</span></div><div class="portfolio-links"><a href="https://mdlulijonas.github.io/Siba-Styles/" target="_blank">Live →</a></div></div></div>
+            <div class="portfolio-item" data-category="business"><div class="portfolio-img"><i class="fas fa-tractor"></i></div><div class="portfolio-content"><h3>Makwala Agri</h3><p>Agricultural business showcase.</p><div class="portfolio-tags"><span class="tag">Responsive</span></div><div class="portfolio-links"><a href="https://mdlulijonas.github.io/Makwala-Agri/" target="_blank">View →</a></div></div></div>
+        </div>
+    </div>
+</section>
 
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="section portfolio">
-        <div class="container">
-            <div class="section-title">
-                <h2>Our Portfolio</h2>
-                <p>Showcasing our expertise through diverse, high-impact projects across multiple industries.</p>
+<section id="technology" class="section tech-stack">
+    <div class="container">
+        <div class="section-title"><h2>Cutting‑Edge Stack</h2><p>Tools we master to build future‑proof systems.</p></div>
+        <div class="tech-grid">
+            <div class="tech-category"><h3><i class="fab fa-react"></i> Frontend</h3><ul class="tech-list"><li><i class="fas fa-check"></i> React, Vue, Next.js</li><li><i class="fas fa-check"></i> TypeScript, Tailwind</li><li><i class="fas fa-check"></i> PWA, Three.js</li></ul></div>
+            <div class="tech-category"><h3><i class="fas fa-server"></i> Backend</h3><ul class="tech-list"><li><i class="fas fa-check"></i> Node.js, Python, PHP</li><li><i class="fas fa-check"></i> Express, Flask, Laravel</li><li><i class="fas fa-check"></i> REST, GraphQL</li></ul></div>
+            <div class="tech-category"><h3><i class="fas fa-cloud"></i> Cloud & DB</h3><ul class="tech-list"><li><i class="fas fa-check"></i> MongoDB, PostgreSQL, MySQL</li><li><i class="fas fa-check"></i> AWS, Firebase, Vercel</li><li><i class="fas fa-check"></i> Docker, CI/CD</li></ul></div>
+        </div>
+    </div>
+</section>
+
+<section id="laptops" class="section laptop-section">
+    <div class="container">
+        <div class="section-title"><h2>Refurbished Laptops & Repairs</h2><p>Quality devices and expert fixes at affordable prices.</p></div>
+        <div class="laptop-grid">
+            <div class="laptop-card"><h3>💻 Refurbished Laptops</h3><p>Grade A refurbished – Dell, HP, Lenovo. Cleaned, tested, with 3 months warranty.</p><div class="price">Starting from R2,600</div><a href="#contact" class="btn">Request Stock List</a></div>
+            <div class="laptop-card"><h3>🔧 Hardware & Software Repair</h3><p>Screen replacement, keyboard, battery, OS installation, virus removal, data recovery.</p><div class="price">Quick turnaround</div><a href="#contact" class="btn">Book a Repair</a></div>
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="section">
+    <div class="container">
+        <div class="section-title"><h2>Let’s Build Something Great</h2><p>Reach out for development, repairs, or laptop purchases.</p></div>
+        <div class="contact-content">
+            <div>
+                <div class="contact-item"><div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div><div><h3>Location</h3><p>Winterveld, Tshwane, South Africa</p></div></div>
+                <div class="contact-item"><div class="contact-icon"><i class="fas fa-phone"></i></div><div><h3>Call / WhatsApp</h3><p>+27 65 509 2417</p></div></div>
+                <div class="contact-item"><div class="contact-icon"><i class="fas fa-envelope"></i></div><div><h3>Email</h3><p>sales@sddtech.co.za</p></div></div>
+                <div class="contact-item"><div class="contact-icon"><i class="fab fa-github"></i></div><div><h3>GitHub</h3><p>github.com/Mdluljionas</p></div></div>
             </div>
-            
-            <div class="portfolio-filters">
-                <button class="filter-btn active" data-filter="all">All Projects</button>
-                <button class="filter-btn" data-filter="web">Web Applications</button>
-                <button class="filter-btn" data-filter="business">Business Solutions</button>
-                <button class="filter-btn" data-filter="ecommerce">E-Commerce</button>
-            </div>
-            
-            <div class="portfolio-grid">
-                <!-- Meela Training & Development -->
-                <div class="portfolio-item" data-category="business">
-                    <div class="portfolio-img">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Meela Training & Development</h3>
-                        <p>Comprehensive educational platform for skills development and professional training programs.</p>
-                        <div class="portfolio-tags">
-                            <span class="tag">HTML5/CSS3</span>
-                            <span class="tag">JavaScript</span>
-                            <span class="tag">PHP</span>
-                            <span class="tag">MySQL</span>
-                            <span class="tag">Responsive Design</span>
-                        </div>
-                        <div class="portfolio-links">
-                            <a href="http://www.meelatdi.co.za" target="_blank" class="portfolio-link">
-                                <i class="fas fa-external-link-alt"></i> Live Site
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Financial Trading Platform -->
-                <div class="portfolio-item" data-category="web">
-                    <div class="portfolio-img">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Financial Trading Platform</h3>
-                        <p>Full-stack trading application with real-time data, user portfolios, and secure transactions.</p>
-                        <div class="portfolio-tags">
-                            <span class="tag">React</span>
-                            <span class="tag">Node.js</span>
-                            <span class="tag">MongoDB</span>
-                            <span class="tag">REST API</span>
-                            <span class="tag">Real-time Data</span>
-                        </div>
-                        <div class="portfolio-links">
-                            <a href="https://github.com/Mdluljionas" target="_blank" class="portfolio-link">
-                                <i class="fab fa-github"></i> Source Code
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Phone Website -->
-                <div class="portfolio-item" data-category="ecommerce">
-                    <div class="portfolio-img">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Mobile Device E-Commerce</h3>
-                        <p>Responsive online store for mobile devices with product catalog and shopping functionality.</p>
-                        <div class="portfolio-tags">
-                            <span class="tag">HTML5/CSS3</span>
-                            <span class="tag">JavaScript</span>
-                            <span class="tag">E-Commerce</span>
-                            <span class="tag">UI/UX Design</span>
-                        </div>
-                        <div class="portfolio-links">
-                            <a href="https://mdlulijonas.github.io/Phone-Website/" target="_blank" class="portfolio-link">
-                                <i class="fas fa-external-link-alt"></i> Live Demo
-                            </a>
-                            <a href="https://github.com/Mdluljionas" target="_blank" class="portfolio-link">
-                                <i class="fab fa-github"></i> Source Code
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Neo Cakes Website -->
-                <div class="portfolio-item" data-category="web">
-                    <div class="portfolio-img">
-                        <i class="fas fa-birthday-cake"></i>
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Neo Cakes Bakery</h3>
-                        <p>Beautiful website for a bakery showcasing products, services, and online ordering capabilities.</p>
-                        <div class="portfolio-tags">
-                            <span class="tag">HTML5/CSS3</span>
-                            <span class="tag">JavaScript</span>
-                            <span class="tag">Bootstrap</span>
-                            <span class="tag">Responsive Design</span>
-                        </div>
-                        <div class="portfolio-links">
-                            <a href="https://mdlulijonas.github.io/Neo-Cakes-website/" target="_blank" class="portfolio-link">
-                                <i class="fas fa-external-link-alt"></i> Live Demo
-                            </a>
-                            <a href="https://github.com/Mdluljionas" target="_blank" class="portfolio-link">
-                                <i class="fab fa-github"></i> Source Code
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Makwala Agriculture -->
-                <div class="portfolio-item" data-category="business">
-                    <div class="portfolio-img">
-                        <i class="fas fa-tractor"></i>
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Makwala Agriculture</h3>
-                        <p>Business website for an agricultural company showcasing services and farming solutions.</p>
-                        <div class="portfolio-tags">
-                            <span class="tag">HTML5/CSS3</span>
-                            <span class="tag">JavaScript</span>
-                            <span class="tag">Business Website</span>
-                            <span class="tag">Responsive Design</span>
-                        </div>
-                        <div class="portfolio-links">
-                            <a href="https://mdlulijonas.github.io/Makwala-Agri/" target="_blank" class="portfolio-link">
-                                <i class="fas fa-external-link-alt"></i> Live Demo
-                            </a>
-                            <a href="https://github.com/Mdluljionas" target="_blank" class="portfolio-link">
-                                <i class="fab fa-github"></i> Source Code
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Siba Styles -->
-                <div class="portfolio-item" data-category="web">
-                    <div class="portfolio-img">
-                        <i class="fas fa-cut"></i>
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Siba Styles Salon</h3>
-                        <p>Elegant website for a hair salon showcasing services, portfolio, and booking functionality.</p>
-                        <div class="portfolio-tags">
-                            <span class="tag">HTML5/CSS3</span>
-                            <span class="tag">JavaScript</span>
-                            <span class="tag">Bootstrap</span>
-                            <span class="tag">Service Booking</span>
-                        </div>
-                        <div class="portfolio-links">
-                            <a href="https://mdlulijonas.github.io/Siba-Styles/" target="_blank" class="portfolio-link">
-                                <i class="fas fa-external-link-alt"></i> Live Demo
-                            </a>
-                            <a href="https://github.com/Mdluljionas" target="_blank" class="portfolio-link">
-                                <i class="fab fa-github"></i> Source Code
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Bontle Ba Modimo Photography -->
-                <div class="portfolio-item" data-category="web">
-                    <div class="portfolio-img">
-                        <i class="fas fa-camera"></i>
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Bontle Ba Modimo Photography</h3>
-                        <p>Portfolio website for a photography business showcasing work and contact information.</p>
-                        <div class="portfolio-tags">
-                            <span class="tag">HTML5/CSS3</span>
-                            <span class="tag">JavaScript</span>
-                            <span class="tag">Portfolio</span>
-                            <span class="tag">Image Gallery</span>
-                        </div>
-                        <div class="portfolio-links">
-                            <a href="https://mdlulijonas.github.io/Bontle-Ba-Modimo-Photography-website/" target="_blank" class="portfolio-link">
-                                <i class="fas fa-external-link-alt"></i> Live Demo
-                            </a>
-                            <a href="https://github.com/Mdluljionas" target="_blank" class="portfolio-link">
-                                <i class="fab fa-github"></i> Source Code
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Rental Management System -->
-                <div class="portfolio-item" data-category="business">
-                    <div class="portfolio-img">
-                        <i class="fas fa-home"></i>
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Rental Management System</h3>
-                        <p>Comprehensive application for property managers to handle tenants, leases, and payments.</p>
-                        <div class="portfolio-tags">
-                            <span class="tag">React</span>
-                            <span class="tag">Python</span>
-                            <span class="tag">Flask</span>
-                            <span class="tag">MongoDB</span>
-                            <span class="tag">Payment Integration</span>
-                        </div>
-                        <div class="portfolio-links">
-                            <a href="https://github.com/Mdluljionas" target="_blank" class="portfolio-link">
-                                <i class="fab fa-github"></i> Source Code
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group"><label>Name</label><input type="text" class="form-control" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" class="form-control" required></div>
+                    <div class="form-group"><label>Message</label><textarea rows="4" class="form-control" required></textarea></div>
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Technology Stack Section -->
-    <section id="technology" class="section tech-stack">
-        <div class="container">
-            <div class="section-title">
-                <h2>Our Technology Stack</h2>
-                <p>Leveraging cutting-edge technologies to build robust, scalable, and future-proof solutions.</p>
-            </div>
-            <div class="tech-grid">
-                <div class="tech-category">
-                    <h3><i class="fab fa-js"></i> Frontend Development</h3>
-                    <ul class="tech-list">
-                        <li><i class="fas fa-check"></i> React.js & Vue.js</li>
-                        <li><i class="fas fa-check"></i> HTML5, CSS3, JavaScript (ES6+)</li>
-                        <li><i class="fas fa-check"></i> Bootstrap & Tailwind CSS</li>
-                        <li><i class="fas fa-check"></i> Responsive Web Design</li>
-                        <li><i class="fas fa-check"></i> Progressive Web Apps (PWA)</li>
-                    </ul>
-                </div>
-                <div class="tech-category">
-                    <h3><i class="fas fa-server"></i> Backend Development</h3>
-                    <ul class="tech-list">
-                        <li><i class="fas fa-check"></i> Node.js & Express.js</li>
-                        <li><i class="fas fa-check"></i> Python & Flask</li>
-                        <li><i class="fas fa-check"></i> RESTful API Development</li>
-                        <li><i class="fas fa-check"></i> Microservices Architecture</li>
-                        <li><i class="fas fa-check"></i> Authentication & Authorization</li>
-                    </ul>
-                </div>
-                <div class="tech-category">
-                    <h3><i class="fas fa-database"></i> Databases & Storage</h3>
-                    <ul class="tech-list">
-                        <li><i class="fas fa-check"></i> MongoDB & Mongoose</li>
-                        <li><i class="fas fa-check"></i> MySQL & PostgreSQL</li>
-                        <li><i class="fas fa-check"></i> Firebase & Firestore</li>
-                        <li><i class="fas fa-check"></i> Database Design & Optimization</li>
-                        <li><i class="fas fa-check"></i> Data Migration & ETL</li>
-                    </ul>
-                </div>
-                <div class="tech-category">
-                    <h3><i class="fas fa-tools"></i> DevOps & Tools</h3>
-                    <ul class="tech-list">
-                        <li><i class="fas fa-check"></i> Git & GitHub</li>
-                        <li><i class="fas fa-check"></i> CI/CD Pipelines</li>
-                        <li><i class="fas fa-check"></i> AWS & Cloud Deployment</li>
-                        <li><i class="fas fa-check"></i> Docker & Containerization</li>
-                        <li><i class="fas fa-check"></i> Testing & Quality Assurance</li>
-                    </ul>
-                </div>
-            </div>
+<footer>
+    <div class="container">
+        <div class="footer-content" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:40px;">
+            <div><h3>SDD TECH</h3><p>Innovation meets reliability.</p><div class="social-links" style="display:flex; gap:15px; margin-top:20px;"><a href="#" style="color:white"><i class="fab fa-linkedin"></i></a><a href="#" style="color:white"><i class="fab fa-twitter"></i></a></div></div>
+            <div><h3>Services</h3><ul class="footer-links" style="list-style:none;"><li>Web & Mobile Dev</li><li>Refurbished Laptops</li><li>IT Repair & Support</li></ul></div>
+            <div><h3>Contact</h3><p>sales@sddtech.co.za<br>+27 65 509 2417</p></div>
         </div>
-    </section>
+        <div class="copyright" style="text-align:center; margin-top:40px;">&copy; 2025 SDD TECH. All rights reserved.</div>
+    </div>
+</footer>
 
-    <!-- Process Section -->
-    <section id="process" class="section process">
-        <div class="container">
-            <div class="section-title">
-                <h2>Our Development Process</h2>
-                <p>A structured approach to delivering high-quality solutions on time and within budget.</p>
-            </div>
-            <div class="process-steps">
-                <div class="process-step">
-                    <div class="step-number">1</div>
-                    <h3 class="step-title">Discovery & Planning</h3>
-                    <p>Requirements analysis, project scope definition, and technology selection.</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">2</div>
-                    <h3 class="step-title">Design & Prototyping</h3>
-                    <p>UI/UX design, wireframing, and creating interactive prototypes.</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">3</div>
-                    <h3 class="step-title">Development</h3>
-                    <p>Agile development with regular iterations and client feedback.</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">4</div>
-                    <h3 class="step-title">Testing & Deployment</h3>
-                    <p>Comprehensive testing, deployment, and post-launch support.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="section testimonials">
-        <div class="container">
-            <div class="section-title">
-                <h2>Client Testimonials</h2>
-                <p>What our clients say about working with SDD TECH.</p>
-            </div>
-            <div class="testimonial-grid">
-                <div class="testimonial-card">
-                    <div class="testimonial-text">
-                        SDD TECH delivered an exceptional trading platform for our financial services company. Their technical expertise and attention to detail were impressive throughout the project.
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="author-info">
-                            <h4>Michael Johnson</h4>
-                            <p>CEO, FinTrade Solutions</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-text">
-                        The rental management system developed by SDD TECH has streamlined our operations significantly. Professional, responsive, and delivered on time.
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="author-info">
-                            <h4>Sarah Williams</h4>
-                            <p>Property Manager, Urban Living</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-text">
-                        We needed a reliable IT support partner, and SDD TECH has exceeded expectations. Their proactive approach minimized downtime and improved security.
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="author-info">
-                            <h4>David Chen</h4>
-                            <p>CTO, TechInnovate Inc.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="container">
-            <h2>Ready to Transform Your Business?</h2>
-            <p>Let's discuss how our technology solutions can drive growth and efficiency for your organization.</p>
-            <a href="#contact" class="btn">Start Your Project</a>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Get In Touch</h2>
-                <p>Contact us to discuss your project requirements or schedule a consultation.</p>
-            </div>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div>
-                            <h3>Our Location</h3>
-                            <p>Winterveld, Tshwane, South Africa</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <div>
-                            <h3>Phone Number</h3>
-                            <p>+27 65 509 2417</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div>
-                            <h3>Email Address</h3>
-                            <p>mdluljonas@gmail.com</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fab fa-github"></i>
-                        </div>
-                        <div>
-                            <h3>GitHub Portfolio</h3>
-                            <p><a href="https://github.com/Mdluljionas" target="_blank" style="color: inherit;">github.com/Mdluljionas</a></p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-certificate"></i>
-                        </div>
-                        <div>
-                            <h3>Certifications</h3>
-                            <p><a href="https://www.credly.com/users/jonas-mdlult" target="_blank" style="color: inherit;">IBM SkillsBuild Credentials</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="contact-form">
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <label for="name">Your Name</label>
-                            <input type="text" id="name" class="form-control" placeholder="Enter your name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Your Email</label>
-                            <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="company">Company (Optional)</label>
-                            <input type="text" id="company" class="form-control" placeholder="Enter your company name">
-                        </div>
-                        <div class="form-group">
-                            <label for="budget">Project Budget</label>
-                            <select id="budget" class="form-control">
-                                <option value="">Select budget range</option>
-                                <option value="5k-10k">R5,000 - R10,000</option>
-                                <option value="10k-25k">R10,000 - R25,000</option>
-                                <option value="25k-50k">R25,000 - R50,000</option>
-                                <option value="50k+">R50,000+</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Project Details</label>
-                            <textarea id="message" class="form-control" placeholder="Describe your project requirements, timeline, and any specific technologies you're interested in..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn">Send Message</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>SDD TECH</h3>
-                    <p>Enterprise technology solutions provider specializing in custom software development, web applications, and digital transformation.</p>
-                    <div class="social-links">
-                        <a href="https://github.com/Mdluljionas" target="_blank"><i class="fab fa-github"></i></a>
-                        <a href="https://www.credly.com/users/jonas-mdlult" target="_blank"><i class="fas fa-certificate"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h3>Quick Links</h3>
-                    <ul class="footer-links">
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#services">Services</a></li>
-                        <li><a href="#portfolio">Portfolio</a></li>
-                        <li><a href="#technology">Technology Stack</a></li>
-                        <li><a href="#process">Our Process</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Services</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Custom Software Development</a></li>
-                        <li><a href="#">Web Application Development</a></li>
-                        <li><a href="#">Mobile App Development</a></li>
-                        <li><a href="#">Database Solutions</a></li>
-                        <li><a href="#">IT Support & Cybersecurity</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Contact Info</h3>
-                    <ul class="footer-links">
-                        <li><i class="fas fa-map-marker-alt"></i> Winterveld, Tshwane, SA</li>
-                        <li><i class="fas fa-phone"></i> +27 65 509 2417</li>
-                        <li><i class="fas fa-envelope"></i> mdluljonas@gmail.com</li>
-                        <li><i class="fab fa-whatsapp"></i> +27 65 509 2417</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2023 SDD TECH. All Rights Reserved. | Enterprise Technology Solutions</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Mobile menu toggle
-        document.querySelector('.mobile-menu').addEventListener('click', function() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        });
-
-        // Portfolio filtering
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const portfolioItems = document.querySelectorAll('.portfolio-item');
-        
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all buttons
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                // Add active class to clicked button
-                button.classList.add('active');
-                
-                const filterValue = button.getAttribute('data-filter');
-                
-                portfolioItems.forEach(item => {
-                    if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+    // Three.js 3D Background
+    const canvas = document.getElementById('bg-canvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    
+    // Particles
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 1500;
+    const posArray = new Float32Array(particlesCount * 3);
+    for(let i = 0; i < particlesCount * 3; i += 3) {
+        posArray[i] = (Math.random() - 0.5) * 200;
+        posArray[i+1] = (Math.random() - 0.5) * 100;
+        posArray[i+2] = (Math.random() - 0.5) * 100 - 50;
+    }
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    const particlesMaterial = new THREE.PointsMaterial({ size: 0.2, color: 0x00d4ff, transparent: true, opacity: 0.5 });
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+    
+    // Central rotating torus knot
+    const geometry = new THREE.TorusKnotGeometry(1.5, 0.4, 200, 32, 3, 4);
+    const material = new THREE.MeshStandardMaterial({ color: 0x00a8ff, emissive: 0x003366, roughness: 0.3, metalness: 0.8 });
+    const knot = new THREE.Mesh(geometry, material);
+    scene.add(knot);
+    
+    // Lights
+    const light = new THREE.PointLight(0x00aaff, 1);
+    light.position.set(2, 3, 4);
+    scene.add(light);
+    const ambient = new THREE.AmbientLight(0x111122);
+    scene.add(ambient);
+    
+    camera.position.z = 12;
+    camera.position.y = 2;
+    
+    let time = 0;
+    function animate() {
+        requestAnimationFrame(animate);
+        time += 0.008;
+        knot.rotation.x = time;
+        knot.rotation.y = time * 0.7;
+        particlesMesh.rotation.y = time * 0.05;
+        particlesMesh.rotation.x = time * 0.03;
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+    }
+    animate();
+    
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+    
+    // Mobile menu
+    document.querySelector('.mobile-menu').addEventListener('click', () => {
+        document.querySelector('.nav-links').classList.toggle('active');
+    });
+    
+    // Portfolio filter
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const items = document.querySelectorAll('.portfolio-item');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const filter = btn.dataset.filter;
+            items.forEach(item => {
+                if(filter === 'all' || item.dataset.category === filter) item.style.display = 'block';
+                else item.style.display = 'none';
             });
         });
-
-        // Form submission
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
+    });
+    
+    // Form submission
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Thank you! We will reply within 24 hours.');
+        e.target.reset();
+    });
+    
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
             e.preventDefault();
-            alert('Thank you for your message! We will get back to you within 24 hours.');
-            this.reset();
+            const target = document.querySelector(this.getAttribute('href'));
+            if(target) target.scrollIntoView({ behavior: 'smooth' });
+            document.querySelector('.nav-links')?.classList.remove('active');
         });
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                    
-                    // Close mobile menu if open
-                    document.querySelector('.nav-links').classList.remove('active');
-                }
-            });
-        });
-
-        // Add animation to elements when they come into view
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animation = `fadeInUp 0.8s ease-out forwards`;
-                }
-            });
-        }, observerOptions);
-
-        // Observe elements for animation
-        document.querySelectorAll('.service-card, .portfolio-item, .tech-category, .testimonial-card, .stat-item').forEach(el => {
-            el.style.opacity = '0';
-            observer.observe(el);
-        });
-    </script>
+    });
+</script>
 </body>
 </html>
