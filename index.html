@@ -1,1 +1,833 @@
-[[[
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>SDD TECH | Advanced Technology Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0f2a;
+            --primary-dark: #050817;
+            --primary-light: #1a2b6e;
+            --secondary: #00d4ff;
+            --accent: #ff3366;
+            --dark: #0a0c15;
+            --light: #f0f4fc;
+            --gray: #8a9bb5;
+            --gray-light: #1e2438;
+            --success: #00d68f;
+            --glow: 0 0 15px rgba(0, 212, 255, 0.5);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Canvas 3D Background */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header & Navigation - Glassmorphism */
+        header {
+            background: rgba(10, 12, 21, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 35px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--light);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+            text-shadow: var(--glow);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--secondary);
+        }
+
+        /* Hero Section with 3D context */
+        .hero {
+            padding: 220px 0 140px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            backdrop-filter: blur(2px);
+        }
+
+        .hero h1 {
+            font-size: 3.8rem;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 35px;
+            opacity: 0.9;
+            color: #ccddf8;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, var(--secondary), #0099cc);
+            color: var(--dark);
+            border: none;
+            border-radius: 40px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            margin: 5px 10px 5px 0;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: var(--secondary);
+            color: var(--dark);
+        }
+
+        /* Stats Section */
+        .stats {
+            background: rgba(5, 8, 23, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 60px 0;
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        /* Sections */
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-title h2 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: rgba(20, 24, 45, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            transition: var(--transition);
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,212,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--secondary);
+            box-shadow: 0 0 25px rgba(0,212,255,0.3);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 2rem;
+            transition: var(--transition);
+        }
+
+        .service-card:hover .service-icon {
+            transform: rotateY(180deg);
+        }
+
+        .service-card h3 {
+            margin-bottom: 15px;
+            color: var(--secondary);
+            font-size: 1.4rem;
+        }
+
+        .service-card p {
+            color: #b8c7e7;
+        }
+
+        /* Portfolio */
+        .portfolio {
+            background: rgba(5, 8, 23, 0.5);
+        }
+
+        .portfolio-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 50px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: rgba(20, 24, 45, 0.8);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 30px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--light);
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--secondary);
+            color: var(--dark);
+            border-color: var(--secondary);
+            box-shadow: 0 0 15px var(--secondary);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+        }
+
+        .portfolio-item {
+            background: rgba(20, 24, 45, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+            border-color: var(--secondary);
+            box-shadow: 0 10px 30px rgba(0,212,255,0.2);
+        }
+
+        .portfolio-img {
+            height: 220px;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .portfolio-content {
+            padding: 25px;
+        }
+
+        .portfolio-content h3 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .portfolio-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .tag {
+            background: rgba(0, 212, 255, 0.15);
+            color: var(--secondary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .portfolio-links a {
+            color: var(--light);
+            margin-right: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .portfolio-links a:hover {
+            color: var(--secondary);
+        }
+
+        /* Tech Stack (already styled) */
+        .tech-stack {
+            background: linear-gradient(135deg, #0a0c1a, #010101);
+            border-top: 1px solid rgba(0,212,255,0.2);
+            border-bottom: 1px solid rgba(0,212,255,0.2);
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .tech-category {
+            background: rgba(20, 24, 45, 0.6);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0,212,255,0.2);
+        }
+
+        .tech-category h3 {
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .tech-list li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            color: #ccddf8;
+        }
+
+        .tech-list i {
+            color: var(--accent);
+            margin-right: 10px;
+        }
+
+        /* Laptop Sales Section */
+        .laptop-section {
+            background: radial-gradient(circle at 10% 20%, rgba(0,212,255,0.05), transparent);
+        }
+
+        .laptop-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .laptop-card {
+            background: rgba(20,24,45,0.8);
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            border: 1px solid rgba(0,212,255,0.3);
+        }
+
+        .laptop-card h3 {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 20px 0;
+        }
+
+        /* Contact */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(20,24,45,0.5);
+            border-radius: 15px;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(0,212,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+        }
+
+        .contact-form {
+            background: rgba(20,24,45,0.6);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(0,212,255,0.3);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
+
+        footer {
+            background: #05070f;
+            padding: 70px 0 30px;
+            border-top: 1px solid rgba(0,212,255,0.2);
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            z-index: 100;
+            box-shadow: 0 0 20px rgba(37,211,102,0.5);
+            transition: 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .laptop-grid { grid-template-columns: 1fr; }
+            .contact-content { grid-template-columns: 1fr; }
+            .nav-links { display: none; flex-direction: column; background: #0a0c1a; position: absolute; top: 80px; left: 0; width: 100%; padding: 20px; }
+            .nav-links.active { display: flex; }
+            .mobile-menu { display: block; }
+            .portfolio-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- WhatsApp Float -->
+<a href="https://wa.me/27655092417?text=Hi%20SDD%20TECH%20-%20I%20need%20tech%20solutions" class="whatsapp-float" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<header>
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">SDD<span>TECH</span></div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#technology">Tech Stack</a></li>
+                <li><a href="#laptops">Laptops & Repairs</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<section id="home" class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Next-Gen Tech Solutions & Digital Innovation</h1>
+            <p>We build AI-ready platforms, secure systems, and high-performance digital experiences. From custom dev to hardware repairs – your all-in-one tech powerhouse.</p>
+            <a href="#portfolio" class="btn">Explore Work</a>
+            <a href="#laptops" class="btn btn-outline">Refurbished Laptops</a>
+        </div>
+    </div>
+</section>
+
+<section class="stats">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item"><div class="stat-number">80+</div><div class="stat-label">Projects Delivered</div></div>
+            <div class="stat-item"><div class="stat-number">25+</div><div class="stat-label">Technologies</div></div>
+            <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">Client Trust</div></div>
+            <div class="stat-item"><div class="stat-number">7+</div><div class="stat-label">Years Experience</div></div>
+        </div>
+    </div>
+</section>
+
+<section id="services" class="section">
+    <div class="container">
+        <div class="section-title"><h2>Comprehensive Tech Services</h2><p>End-to-end software, hardware, and IT solutions.</p></div>
+        <div class="services-grid">
+            <div class="service-card"><div class="service-icon"><i class="fas fa-code"></i></div><h3>Custom Software Dev</h3><p>Scalable web & mobile apps, ERP, CRM, AI integration.</p></div>
+            <div class="service-card"><div class="service-icon"><i class="fas fa-laptop-code"></i></div><h3>Web & E‑commerce</h3><p>React, Node, Shopify, WordPress – high‑performance stores.</p></div>
+            <div class="service-card"><div class="service-icon"><i class="fas fa-mobile-alt"></i></div><h3>Mobile Apps</h3><p>iOS/Android, Flutter, React Native, merchant solutions.</p></div>
+            <div class="service-card"><div class="service-icon"><i class="fas fa-database"></i></div><h3>Database & Cloud</h3><p>AWS, Azure, MongoDB, PostgreSQL – secure & scalable.</p></div>
+            <div class="service-card"><div class="service-icon"><i class="fas fa-laptop"></i></div><h3>Refurbished Laptops</h3><p>Quality laptops from R2600. Perfect for work & study. Warranty included.</p></div>
+            <div class="service-card"><div class="service-icon"><i class="fas fa-tools"></i></div><h3>Laptop Hardware & Software Repair</h3><p>Diagnostics, screen replacement, OS fix, virus removal – fast turnaround.</p></div>
+            <div class="service-card"><div class="service-icon"><i class="fas fa-shield-alt"></i></div><h3>Cybersecurity & IT Support</h3><p>Data protection, network security, 24/7 monitoring.</p></div>
+            <div class="service-card"><div class="service-icon"><i class="fas fa-chart-line"></i></div><h3>Digital Transformation</h3><p>Business automation, workflow optimization, legacy migration.</p></div>
+        </div>
+    </div>
+</section>
+
+<section id="portfolio" class="section portfolio">
+    <div class="container">
+        <div class="section-title"><h2>Innovative Projects</h2><p>Real solutions, real impact.</p></div>
+        <div class="portfolio-filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="web">Web Apps</button>
+            <button class="filter-btn" data-filter="business">Business</button>
+            <button class="filter-btn" data-filter="ecommerce">E‑commerce</button>
+        </div>
+        <div class="portfolio-grid">
+            <div class="portfolio-item" data-category="business"><div class="portfolio-img"><i class="fas fa-graduation-cap"></i></div><div class="portfolio-content"><h3>Meela Training & Development</h3><p>Educational platform for skills development.</p><div class="portfolio-tags"><span class="tag">PHP/MySQL</span><span class="tag">LMS</span></div><div class="portfolio-links"><a href="http://www.meelatdi.co.za" target="_blank">Live Site →</a></div></div></div>
+            <div class="portfolio-item" data-category="ecommerce"><div class="portfolio-img"><i class="fas fa-store"></i></div><div class="portfolio-content"><h3>Meela Merchant App</h3><p>Merchant dashboard & e‑commerce solution.</p><div class="portfolio-tags"><span class="tag">React</span><span class="tag">Node.js</span></div><div class="portfolio-links"><a href="https://meelamerchant.com" target="_blank">Visit →</a></div></div></div>
+            <div class="portfolio-item" data-category="web"><div class="portfolio-img"><i class="fas fa-file-alt"></i></div><div class="portfolio-content"><h3>Smart Career CV</h3><p>AI-powered CV builder & career platform.</p><div class="portfolio-tags"><span class="tag">Next.js</span><span class="tag">MongoDB</span></div><div class="portfolio-links"><a href="https://www.smartcareercv.co.za" target="_blank">Live Demo →</a></div></div></div>
+            <div class="portfolio-item" data-category="business"><div class="portfolio-img"><i class="fas fa-building"></i></div><div class="portfolio-content"><h3>Shumane Holdings</h3><p>Corporate website for investment holdings.</p><div class="portfolio-tags"><span class="tag">HTML5/CSS3</span><span class="tag">Bootstrap</span></div><div class="portfolio-links"><a href="https://www.shumaneholdings.com" target="_blank">Visit →</a></div></div></div>
+            <div class="portfolio-item" data-category="web"><div class="portfolio-img"><i class="fas fa-chart-line"></i></div><div class="portfolio-content"><h3>Financial Trading Platform</h3><p>Real-time trading with portfolio tracking.</p><div class="portfolio-tags"><span class="tag">React</span><span class="tag">Node</span><span class="tag">WebSocket</span></div><div class="portfolio-links"><a href="https://github.com/Mdluljionas" target="_blank">GitHub →</a></div></div></div>
+            <div class="portfolio-item" data-category="ecommerce"><div class="portfolio-img"><i class="fas fa-mobile-alt"></i></div><div class="portfolio-content"><h3>Phone E‑commerce</h3><p>Mobile device store with cart system.</p><div class="portfolio-tags"><span class="tag">JS/CSS</span></div><div class="portfolio-links"><a href="https://mdlulijonas.github.io/Phone-Website/" target="_blank">Demo →</a></div></div></div>
+            <div class="portfolio-item" data-category="web"><div class="portfolio-img"><i class="fas fa-cut"></i></div><div class="portfolio-content"><h3>Siba Styles Salon</h3><p>Booking & portfolio for beauty salon.</p><div class="portfolio-tags"><span class="tag">Bootstrap</span><span class="tag">JS</span></div><div class="portfolio-links"><a href="https://mdlulijonas.github.io/Siba-Styles/" target="_blank">Live →</a></div></div></div>
+            <div class="portfolio-item" data-category="business"><div class="portfolio-img"><i class="fas fa-tractor"></i></div><div class="portfolio-content"><h3>Makwala Agri</h3><p>Agricultural business showcase.</p><div class="portfolio-tags"><span class="tag">Responsive</span></div><div class="portfolio-links"><a href="https://mdlulijonas.github.io/Makwala-Agri/" target="_blank">View →</a></div></div></div>
+        </div>
+    </div>
+</section>
+
+<section id="technology" class="section tech-stack">
+    <div class="container">
+        <div class="section-title"><h2>Cutting‑Edge Stack</h2><p>Tools we master to build future‑proof systems.</p></div>
+        <div class="tech-grid">
+            <div class="tech-category"><h3><i class="fab fa-react"></i> Frontend</h3><ul class="tech-list"><li><i class="fas fa-check"></i> React, Vue, Next.js</li><li><i class="fas fa-check"></i> TypeScript, Tailwind</li><li><i class="fas fa-check"></i> PWA, Three.js</li></ul></div>
+            <div class="tech-category"><h3><i class="fas fa-server"></i> Backend</h3><ul class="tech-list"><li><i class="fas fa-check"></i> Node.js, Python, PHP</li><li><i class="fas fa-check"></i> Express, Flask, Laravel</li><li><i class="fas fa-check"></i> REST, GraphQL</li></ul></div>
+            <div class="tech-category"><h3><i class="fas fa-cloud"></i> Cloud & DB</h3><ul class="tech-list"><li><i class="fas fa-check"></i> MongoDB, PostgreSQL, MySQL</li><li><i class="fas fa-check"></i> AWS, Firebase, Vercel</li><li><i class="fas fa-check"></i> Docker, CI/CD</li></ul></div>
+        </div>
+    </div>
+</section>
+
+<section id="laptops" class="section laptop-section">
+    <div class="container">
+        <div class="section-title"><h2>Refurbished Laptops & Repairs</h2><p>Quality devices and expert fixes at affordable prices.</p></div>
+        <div class="laptop-grid">
+            <div class="laptop-card"><h3>💻 Refurbished Laptops</h3><p>Grade A refurbished – Dell, HP, Lenovo. Cleaned, tested, with 3 months warranty.</p><div class="price">Starting from R2,600</div><a href="#contact" class="btn">Request Stock List</a></div>
+            <div class="laptop-card"><h3>🔧 Hardware & Software Repair</h3><p>Screen replacement, keyboard, battery, OS installation, virus removal, data recovery.</p><div class="price">Quick turnaround</div><a href="#contact" class="btn">Book a Repair</a></div>
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="section">
+    <div class="container">
+        <div class="section-title"><h2>Let’s Build Something Great</h2><p>Reach out for development, repairs, or laptop purchases.</p></div>
+        <div class="contact-content">
+            <div>
+                <div class="contact-item"><div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div><div><h3>Location</h3><p>Winterveld, Tshwane, South Africa</p></div></div>
+                <div class="contact-item"><div class="contact-icon"><i class="fas fa-phone"></i></div><div><h3>Call / WhatsApp</h3><p>+27 65 509 2417</p></div></div>
+                <div class="contact-item"><div class="contact-icon"><i class="fas fa-envelope"></i></div><div><h3>Email</h3><p>sales@sddtech.co.za</p></div></div>
+                <div class="contact-item"><div class="contact-icon"><i class="fab fa-github"></i></div><div><h3>GitHub</h3><p>github.com/Mdluljionas</p></div></div>
+            </div>
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group"><label>Name</label><input type="text" class="form-control" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" class="form-control" required></div>
+                    <div class="form-group"><label>Message</label><textarea rows="4" class="form-control" required></textarea></div>
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-content" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:40px;">
+            <div><h3>SDD TECH</h3><p>Innovation meets reliability.</p><div class="social-links" style="display:flex; gap:15px; margin-top:20px;"><a href="#" style="color:white"><i class="fab fa-linkedin"></i></a><a href="#" style="color:white"><i class="fab fa-twitter"></i></a></div></div>
+            <div><h3>Services</h3><ul class="footer-links" style="list-style:none;"><li>Web & Mobile Dev</li><li>Refurbished Laptops</li><li>IT Repair & Support</li></ul></div>
+            <div><h3>Contact</h3><p>sales@sddtech.co.za<br>+27 65 509 2417</p></div>
+        </div>
+        <div class="copyright" style="text-align:center; margin-top:40px;">&copy; 2025 SDD TECH. All rights reserved.</div>
+    </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+    // Three.js 3D Background
+    const canvas = document.getElementById('bg-canvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    
+    // Particles
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 1500;
+    const posArray = new Float32Array(particlesCount * 3);
+    for(let i = 0; i < particlesCount * 3; i += 3) {
+        posArray[i] = (Math.random() - 0.5) * 200;
+        posArray[i+1] = (Math.random() - 0.5) * 100;
+        posArray[i+2] = (Math.random() - 0.5) * 100 - 50;
+    }
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    const particlesMaterial = new THREE.PointsMaterial({ size: 0.2, color: 0x00d4ff, transparent: true, opacity: 0.5 });
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+    
+    // Central rotating torus knot
+    const geometry = new THREE.TorusKnotGeometry(1.5, 0.4, 200, 32, 3, 4);
+    const material = new THREE.MeshStandardMaterial({ color: 0x00a8ff, emissive: 0x003366, roughness: 0.3, metalness: 0.8 });
+    const knot = new THREE.Mesh(geometry, material);
+    scene.add(knot);
+    
+    // Lights
+    const light = new THREE.PointLight(0x00aaff, 1);
+    light.position.set(2, 3, 4);
+    scene.add(light);
+    const ambient = new THREE.AmbientLight(0x111122);
+    scene.add(ambient);
+    
+    camera.position.z = 12;
+    camera.position.y = 2;
+    
+    let time = 0;
+    function animate() {
+        requestAnimationFrame(animate);
+        time += 0.008;
+        knot.rotation.x = time;
+        knot.rotation.y = time * 0.7;
+        particlesMesh.rotation.y = time * 0.05;
+        particlesMesh.rotation.x = time * 0.03;
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+    }
+    animate();
+    
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+    
+    // Mobile menu
+    document.querySelector('.mobile-menu').addEventListener('click', () => {
+        document.querySelector('.nav-links').classList.toggle('active');
+    });
+    
+    // Portfolio filter
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const items = document.querySelectorAll('.portfolio-item');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const filter = btn.dataset.filter;
+            items.forEach(item => {
+                if(filter === 'all' || item.dataset.category === filter) item.style.display = 'block';
+                else item.style.display = 'none';
+            });
+        });
+    });
+    
+    // Form submission
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Thank you! We will reply within 24 hours.');
+        e.target.reset();
+    });
+    
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if(target) target.scrollIntoView({ behavior: 'smooth' });
+            document.querySelector('.nav-links')?.classList.remove('active');
+        });
+    });
+</script>
+</body>
+</html>
